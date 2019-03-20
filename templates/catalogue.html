@@ -1,0 +1,51 @@
+{% extends 'index.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+{% block content %}
+
+<div class="sale-banner">
+	<a href="{% url 'catalogue_category' 'sale' %}"><img src="{% static 'products/img/sale.png' %}" alt="sale"></a>
+</div>
+
+<section class="main">
+	<div class="container">
+
+		<div class="products-catalog">
+
+            {% for product in products %}
+			<div class="products-element">
+                <a href="{% url 'product_info' product.pk %}">
+				<div class="products-element-img">
+					<img src="{{ product.title_image.url }}" alt="uggs">
+				</div>
+				<span class="products-element-title">{{ product.vendor_code }}</span>
+				<div class="price-block">
+					<span class="current-price">{{ product.price }} UAH</span>
+                    {% if product.old_price %}
+					<span class="old-price">{{ product.old_price }} UAH</span>
+                    {% endif %}
+				</div>	
+				<div class="size-list">
+                    {% for size in product.size.all %}
+					<div class="size-block">{{ size }}</div>
+                    {% endfor %}
+				</div>
+				<div class="new">НОВИНКА</div>
+                </a>
+			</div>
+            {% endfor %}
+
+		</div>
+	</div>
+
+    {% include 'pagination.html' %}
+	
+</section>
+
+{% endblock content %}
+
+
+
+

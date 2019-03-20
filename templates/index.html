@@ -1,0 +1,279 @@
+{% load static %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+    {% block title %}
+	<title>Главная</title>
+    {% endblock title %}
+	<link rel="stylesheet" type="text/css" href="{% static 'products/css/style.css' %}">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="{% static 'products/slick/slick.css' %}"/>
+	<link rel="stylesheet" type="text/css" href="{% static 'products/slick/slick-theme.css' %}"/>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+
+
+<header>
+	<div class="header-top">
+		<div class="container">
+			<div class="header-contacts">
+				<a href=""><img src="{% static 'products/img/facebook.svg' %}" alt="facebook"></a>
+				<a href=""><img src="{% static 'products/img/instagram.svg' %}" alt="instagram"></a>
+				<span>Как нас найти</span>
+			</div>
+		</div>
+	</div>
+	<div class="header">
+		<div class="container">
+			<div class="logo">
+				<a href="{% url 'home' %}"><img src="{% static 'products/img/logo.svg' %}" alt="logo"></a>
+			</div>
+			<div class="header-right">
+
+				 <div id="search-wrap">
+				  <form method="get" action="{% url 'catalogue' %}" autocomplete="on">
+				  <input id="search" name="query" type="text" placeholder="Search">
+                      <input id="search_submit" value="search" type="submit">
+				  </form>
+				</div>
+                {% if cart_sum %}
+				<a href="{% url 'order' %}" class="baket"><img src="{% static 'products/img/baket.svg' %}" alt="baket"></a>
+				<span class="baket-price cart-sum">{{ cart_sum }} UAH</span>
+                {% endif %}
+			</div>
+		</div>
+	</div>
+
+	<nav class="navbar navbar-expand-lg navbar-light">
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+	    	<span class="navbar-toggler-icon"></span>
+	  	</button>
+
+	  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+		    <ul class="navbar-nav">
+
+              {% for category in main_categories %}
+                  {% if category.title == 'Распродажа' %}
+                    <li class="dropdown sale">{{ category.title }}
+                  {% elif category.title == 'Jibbitz' %}
+                    <li><a href="{% url 'catalogue_jibbitz' %}">Jibbitz</a></li>
+                  {% else %}
+                    <li class="dropdown">{{ category.title }}
+                  {% endif %}
+                  {% if not category.title == 'Jibbitz' %}
+				  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+					  <div>
+						  <h4>ВИД ОБУВИ</h4>
+                          {% for type in footwear_types %}
+						  <a class="dropdown-item"
+                             href="{% url 'catalogue_category_footwear_type' category.slug type.slug %}">
+                              {{ type.title }}</a>
+                          {% endfor %}
+					  </div>
+					  <div>
+						  <h4>Бренды</h4>
+                          {% for brand in brands %}
+						  <a class="dropdown-item" href="{% url 'catalogue_category_brand' category.slug brand.slug %}">
+                              {{ brand.title }}</a>
+                          {% endfor %}
+					  </div>
+					  <div>
+						  <h4>Коллекция</h4>
+                          {% for collection in collections %}
+						  <a class="dropdown-item"
+                             href="{% url 'catalogue_category_collection' category.slug collection.slug %}">
+                              {{ collection.title }}</a>
+                          {% endfor %}
+					  </div>
+				  </div>
+                  {% endif %}
+			  </li>
+              {% endfor %}
+
+		  	</ul>
+		  </div>
+	</nav>
+
+</header>
+
+
+{% block content %}
+
+
+<section id="main-banner">
+	<a href="{% url 'catalogue' %}">
+		<img src="{% static 'products/img/banner.png' %}" alt="banner">
+	</a>
+</section>
+
+<main>
+	<div class="row preHeight" style="height: auto;">
+		<div class="col-sm-4">
+			<div class="woman-collection">
+				<a href="{% url 'catalogue_category' 'women' %}"><img src="{% static 'products/img/01.png' %}" alt=""></a>
+			</div>
+			<div class="croc">
+				<a href="{% url 'catalogue_brand' 'crocs' %}"><img src="{% static 'products/img/05.png' %}" alt=""></a>
+			</div>
+		</div>
+		<div class="col-sm-8">
+			<div class="children-collection">
+				<a href="{% url 'catalogue_children' %}"><img src="{% static 'products/img/02.png' %}" alt=""></a>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="men-collection">
+						<a href="{% url 'catalogue_category' 'men' %}">
+                            <img src="{% static 'products/img/04.png' %}" alt=""></a>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="crocs-collection">
+						<a href="{% url 'catalogue_brand' 'crocs' %}">
+                            <img src="{% static 'products/img/07.png' %}" alt=""></a>
+					</div>
+					<div>
+						<a href="{% url 'catalogue_jibbitz' %}">
+                            <img src="{% static 'products/img/06.png' %}" alt=""></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+
+
+<section id="style">
+	<div class="container">
+		<h3 class="title">Стиль</h3>
+		<div class="shoes-block">
+			{% for type in footwear_types %}
+            <div class="shoes-item">
+                <a href="{% url 'catalogue_footwear_type' type.slug %}">
+					<div class="shoes-img">
+						{% if type.icon %}
+					    <img src="{{ type.icon.url }}" alt="crocs">
+                        {% endif %}
+					</div>
+					<h5 class="shoes-title">{{ type.title }}</h5>
+				</a>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+</section>
+
+<section id="instagram">
+	<div class="container">
+		<h3 class="title">INSTAGRAM</h3>
+		<div class="insta-gallery">
+			<span class="insta-img">
+				<img src="{% static 'products/img/11.png' %}" alt="11">
+            </span>
+			<span class="insta-img">
+				<img src="{% static 'products/img/12.png' %}" alt="12">
+            </span>
+			<span class="insta-img">
+				<img src="{% static 'products/img/13.png' %}" alt="13">
+            </span>
+			<span class="insta-img">
+				<img src="{% static 'products/img/14.png' %}" alt="14">
+            </span>
+		</div>
+	</div>
+</section>
+
+{% endblock content %}
+
+<footer id="footer">
+	<div class="container">
+		<div class="purchase">
+			<h5>Покупки</h5>
+			<ul>
+                {% for category in main_categories %}
+                    {% if not category.title == 'Jibbitz' %}
+				    <li><a href="{% url 'catalogue_category' category.slug %}">{{ category.title }}</a></li>
+                    {% else %}
+                    <li><a href="{% url 'catalogue_jibbitz' %}">{{ category.title }}</a></li>
+                    {% endif %}
+                {% endfor %}
+			</ul>
+		</div>
+		<div class="service">
+			<h5>Сервис</h5>
+			<ul>
+				<li><a href="{% url 'order' %}">Корзина заказов</a></li>
+				<li><a href="#">Размерная сетка</a></li>
+				<li><a href="#">Оплата и доставка</a></li>
+				<li><a href="#">Возврат</a></li>
+			</ul>
+		</div>
+		<div class="available">
+			<h5>Мы достпуны:</h5>
+			<ul>
+				<li><a href="#">тел. (044) 999 88 88</a></li>
+				<li><a href="#">email: support@crocs.ua</a></li>
+				<li style="color: white; font-family: Lato; font-size: 13px">пн-сб 10:00-18:00</li>
+			</ul>
+		</div>
+		<div class="subscribe">
+			<h5>Подпишись на рассылку новостей</h5>
+			<div class="subscribe-box">
+				<form method="post" action="{% url 'email_create' %}">
+                    {% csrf_token %}
+					<div class="subscribe-wrap">
+                {% render_field email_form.email placeholder="Введите Ваш Email" style='color: white; font-family: Lato; font-size: 13px' %}
+						<button type="submit">Принять</button>
+					</div>
+				</form>
+				<div class="social-media">
+					<p>Мы в сети</p>
+					<div class="social-media-links">
+						<div class="links">
+							<a href="#" target="_blank">
+                                <img src="{% static 'products/img/facebook-f.svg' %}" alt="facebook">
+                            </a>
+							<a href="#" target="_blank">
+                                <img src="{% static 'products/img/instagram-f.svg' %}" alt="instagram">
+                            </a>
+						</div>
+
+						<div class="feedback">
+							<a href="#">
+								<img src="{% static 'products/img/email.svg' %}" alt="email">
+								E-mail
+							</a>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="copy">
+		<a href="#">© 2019 Crocs.org.ua Ukraine • </a>
+		<a href="#">Пользовательское соглашение • </a>
+		<a href="#">Карта сайта • </a>
+		<a href="#">Компания • </a>
+		<a href="#">Разработчик сайта</a>
+	</div>
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script type="text/javascript" src="{% static 'products/slick/slick.min.js' %}"></script>
+<script src="{% static 'products/js/scripts.js' %}"></script>
+</body>
+</html>

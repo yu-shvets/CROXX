@@ -1,0 +1,130 @@
+{% extends 'index.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+        <section class="product-block">
+            <div class="container">
+                <ul class="breadcrumb">
+                    <li><a href="{% url 'home' %}">Главная страница</a></li>
+                    <li>
+                        <a href="{% url 'catalogue_category' product.category.slug %}">{{ product.category.title }}</a>
+                    </li>
+                    <li>{{ product.footwear_type.title }}</li>
+                </ul>
+            </div>
+            <div class="container">
+                <div class="row product-main">
+                    <div class="col-xs-12 col-md-8">
+
+                        <div class="product-slider">
+                            <div class="slider slider-for main-slide">
+                                <div class="product-slider-img">
+                                    <img src="{{ product.title_image.url }}" alt="">
+                                </div>
+                                {% for image in product.image_set.all %}
+                                <div class="product-slider-img">
+                                    <img src="{{ image.image.url }}" alt="">
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="slider slider-nav slider-controlls">
+                                <div class="slider-mini-img">
+                                    <img src="{{ product.title_image.url }}" alt="">
+                                </div>
+                                {% for image in product.image_set.all %}
+                                <div class="slider-mini-img">
+                                    <img src="{{ image.image.url }}" alt="">
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-xs-12 col-md-4">
+                        <h3 class="product-title">{{ product.title }}</h3>
+                        <div class="product-price">
+                            <div class="product-currently-price">{{ product.price }} UAH</div>
+                            {% if product.old_price %}
+                            <div class="product-old-price">{{ product.old_price }} UAH</div>
+                            {% endif %}
+                        </div>
+
+                        <form method="post" action="{% url 'add_to_cart' product.id %}">
+                            {% csrf_token %}
+                        <div class="product-colors">
+                            <p>Цвет:</p>
+                            <select name="color">
+                                {% for option in product.color.all %}
+                                <option>{{ option }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        {% if not product.category.title == 'Jibbitz' %}
+                        <div class="sizes-list">
+                                <p>Размер: </p>
+                                <select name="size">
+                                    {% for option in product.size.all %}
+                                    <option>{{ option }}</option>
+                                    {% endfor %}
+                                </select>
+                        </div>
+                        {% endif %}
+
+                        <div class="sizes-table-block">
+                            {% if not product.category.title == 'Jibbitz' %}
+                            <a href="#" data-toggle="modal" data-target="#sizesTableModal">Таблица размеров</a>
+                            <p>
+                                В случае расхождения размера, указанного на бирке и размера,
+                                указанного на подошве, подкладке,
+                                внутренней части и других местах обуви, считать правильным размер,
+                                указанный на обуви.
+                            </p>
+                            {% endif %}
+                            <button type="submit" class="add-to-cart">Добавить в корзину</button>
+                        </div>
+                        </form>
+
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="sizesTableModal" tabindex="-1" role="dialog"
+                             aria-labelledby="sizesTableModal" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">
+                                            Размерная сетка обуви для взрослых
+                                        </h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <img src="{% static 'products/img/sizes.jpg' %}" alt="sizes">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="about-product">
+                    <div class="about-product-text col-md-7">
+                        <h3>описание товара</h3>
+                        <div>
+                            <p>Артикул модели {{ product.vendor_code }}</p>
+                            <p>{{ product.description|safe }}</p>
+                        </div>
+                    </div>
+                    <div class="about-product-img">
+                        <img src="{{ product.title_image.url }}" alt="">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+{% endblock content %}

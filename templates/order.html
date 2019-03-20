@@ -1,0 +1,113 @@
+{% extends 'index.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+
+<section class="order">
+	<div class="order-box">
+
+		<form method="post" action="{% url 'create_order' %}" class="order-form">
+            {% csrf_token %}
+		<div class="checkout">
+			<h4>Оформить заказ</h4>
+			<div class="city">
+				<p>Ваш город</p>
+				{% render_field order_form.city %}
+			</div>
+			<div class="delivery">
+				<p>Доставка</p>
+				<div class="dell">
+					{% render_field order_form.delivery_type %}
+				</div>
+			</div>
+			<div class="inputs-group">
+				<p>Имя</p>
+				{% render_field order_form.first_name %}
+			</div>
+			<div class="inputs-group">
+				<p>Фамилия</p>
+				{% render_field order_form.last_name %}
+			</div>
+			<div class="inputs-group">
+				<p>Отчество</p>
+				{% render_field order_form.patronymic %}
+			</div>
+			<div class="inputs-group">
+				<p>Телефон</p>
+                {% render_field order_form.phone placeholder="+38 (**) *** - ** - **" %}
+			</div>
+			<div class="inputs-group">
+				<p>E-mail</p>
+				{% render_field order_form.email %}
+			</div>
+			<div class="payment-pethods">
+				<p>Способ оплаты</p>
+				<div>
+                    {% render_field order_form.payment_type %}
+				</div>
+			</div>
+		</div>
+		<div class="post-info">
+			<h5>Информация об отделении Новой Почты</h5>
+			<div class="post-number">
+				<p>Номер отделения</p>
+				{% render_field order_form.np_branch %}
+			</div>
+		</div>
+
+		<button class="checkout-btn" type="submit">Оформить заказ</button>
+		</form>
+
+
+		<div class="cart-products">
+
+            {% for item in cart_products %}
+			<div class="cart-product-item">
+				<div class="cart-product-img">
+					<a href="{% url 'product_info' item.product.id %}">
+                        <img src="{{ item.product.title_image.url }}" alt="uggs">
+                    </a>
+				</div>
+				<div class="cart-product-info">
+					<h5>{{ item.product.title }}</h5>
+                    {% if not item.product.category.title == 'Jibbitz' %}
+					<p>Размер <span class="cart-product-size">{{ item.size }}</span></p>
+                    {% endif %}
+					<p>Код: <span class="cart-product-code">{{ item.product.vendor_code }} {{ item.color }}</span></p>
+					<div class="amountandprice">
+						<div class="amount">
+							<form method="post" action="{% url 'update_quantity' item.item_id %}"
+                                  id="form--{{ item.item_id }}">
+                                {% csrf_token %}
+								<input class="update_q" type="number" min="1" max="10" name="new_quantity"
+                                       value="{{ item.quantity }}" />
+							</form>
+
+						</div>
+						<div id="sum--{{ item.item_id }}" class="cart-product-price">{{ item.sum }} UAH</div>
+					</div>
+				</div>
+				<div class="cart-delete">
+					<a href="{% url 'cart_delete' item.item_id %}"><img src="{% static 'products/img/delete.svg' %}"
+                                                                        alt=""></a>
+				</div>
+			</div>
+            {% endfor %}
+
+			<div class="total">
+				<p>Итого: </p>
+				<div class="total-price cart-sum">{{ cart_sum }} UAH</div>
+			</div>
+
+
+		</div>
+	</div>
+
+</section>
+
+
+{% endblock content %}
+
+

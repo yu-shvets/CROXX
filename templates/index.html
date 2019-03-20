@@ -229,7 +229,7 @@
 				<form method="post" action="{% url 'email_create' %}">
                     {% csrf_token %}
 					<div class="subscribe-wrap">
-                {% render_field email_form.email placeholder="Введите Ваш Email" style='color: white; font-family: Lato; font-size: 13px' %}
+                {% render_field email_form.email placeholder="Введите Ваш Email" style='font-family: Lato; font-size: 13px' %}
 						<button type="submit">Принять</button>
 					</div>
 				</form>

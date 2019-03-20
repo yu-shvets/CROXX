@@ -26,7 +26,7 @@ SECRET_KEY = '^blk=ko36+=sj-ol094nvqcxli)^_&i4%15*^g@0_c7#caf)7y'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -85,8 +85,8 @@ WSGI_APPLICATION = 'CROXX.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'croxx_db',
-        'USER': 'croxx_user',
+        'NAME': 'croxx',
+        'USER': 'django',
         'PASSWORD': '********',
         'HOST': 'localhost',
         'PORT': '',
@@ -131,10 +131,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = '/home/django/CROXX/static/'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = '/home/django/CROXX/media/'
 
 
 CKEDITOR_UPLOAD_PATH = 'uploads/'

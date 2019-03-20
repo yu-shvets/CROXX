@@ -141,3 +141,4 @@ CKEDITOR_UPLOAD_PATH = 'uploads/'
 
 
 CART_SESSION_ID = 'cart'
+
